@@ -1,18 +1,18 @@
 const http = require('http'); //import files
+const bodyParser = require('body-parser');
 
 const express = require('express')
 
 const app = express();
 
-app.use('/add-product',(req,res,next)=>{
-    console.log("In another middleware");
-    res.send('<h1>Add product page</h1>');
-})
+const adminRoutes  = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
-app.use('/',(req,res,next)=>{
-    console.log("In another middleware");
-    res.send('<h1>Hello from express</h1>');
-})
+app.use(bodyParser.urlencoded({extended:false}));
+
+app.use(shopRoutes);
+app.use(adminRoutes);
+
 // const routes = require ('./routes')
 //http module
 // function rqListener(req,res){
