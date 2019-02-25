@@ -11,22 +11,11 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({extended:false}));
 
 app.use(shopRoutes);
-app.use(adminRoutes);
+app.use('/admin',adminRoutes);
+app.use((req, res, next) => {
+    res.status(404).send('<h1>Page not found</h1>');
+});
 
-// const routes = require ('./routes')
-//http module
-// function rqListener(req,res){
-// }
-// http.createServer(rqListener);
-
-// http.createServer(function(req,res){
-// })
-
-// console.log(routes.sometext);
-
-// const server = http.createServer(routes);
-
-// const server = http.createServer(routes.handler);
 const server = http.createServer(app);
 
 server.listen(3000);  //listen for incoming request
