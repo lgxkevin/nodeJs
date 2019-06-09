@@ -12,7 +12,7 @@ Router.get('/', (req, res, next) => {
     // console.log(adminData.products);
     // res.sendFile(path.join(rootDir,'views', 'shop.html'));
 
-    // use the default templating engine (defined in app.js) and return that template
+    // use the default template engine (defined in app.js) and return that template
     const products = adminData.products;
     // render function allow us to pass data that should be added in to view
     res.render('shop', {
