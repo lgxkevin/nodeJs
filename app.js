@@ -6,6 +6,12 @@ const express = require('express')
 
 const app = express();
 
+// the default engine extension to use when omitted
+app.set('view engine', 'pug');
+// A directory or an array of directories for the application's views.
+app.set('views', 'views');
+
+
 const adminData  = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
