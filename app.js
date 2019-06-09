@@ -1,13 +1,24 @@
 const http = require('http'); //import files
 const bodyParser = require('body-parser');
 const path = require('path');
+const expressHbs = require('express-handlebars');
 
 const express = require('express')
 
 const app = express();
 
+// register Handlebars
+// expressHbs() returns the initialized view engine
+app.engine('handlebars', expressHbs({
+    layoutsDir:'views/layouts/',
+    defaultLayout: 'main-layout',
+    extname: 'handlebars'
+}));
+app.set('view engine', 'handlebars');
+
 // the default engine extension to use when omitted
-app.set('view engine', 'pug');
+//app.set('view engine', 'pug');
+
 // A directory or an array of directories for the application's views.
 app.set('views', 'views');
 
