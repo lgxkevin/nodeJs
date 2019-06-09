@@ -9,7 +9,9 @@ const rootDir = require ('../util/path');
 const products = [];
 Router.get('/add-product',(req,res,next)=>{
     //res.send('<html><form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add product</button><form></html>');
-    res.sendFile(path.join(rootDir,'views','add-product.html'))
+    // res.sendFile(path.join(rootDir,'views','add-product.html'))
+
+    res.render('add-product',{pageTitle:'addProduct'})
 })
 
 Router.post('/add-product',(req,res,next)=>{
