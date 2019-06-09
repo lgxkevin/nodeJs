@@ -13,7 +13,9 @@ Router.get('/',(req,res,next)=>{
     // res.sendFile(path.join(rootDir,'views', 'shop.html'));
 
     // use the default templating engine (defined in app.js) and return that template
-    res.render('shop')
+    const products = adminData.products;
+    // render function allow us to pass data that should be added in to view
+    res.render('shop', {prods: products, docTitle: 'PugShop'});
 })
 
 module.exports = Router;
