@@ -29,6 +29,8 @@ app.set('views', 'views');
 const adminData  = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
+// req.body contains key-value pairs of data submitted in the request body.
+// By default, it is undefined, and is populated when use body-parsing middleware
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname,'public')));
 
