@@ -32,6 +32,7 @@ const shopRoutes = require('./routes/shop');
 // req.body contains key-value pairs of data submitted in the request body.
 // By default, it is undefined, and is populated when use body-parsing middleware
 app.use(bodyParser.urlencoded({extended:false}));
+// load public css files
 app.use(express.static(path.join(__dirname,'public')));
 
 app.use(shopRoutes);
