@@ -6,7 +6,7 @@ const path = require('path');
 const express = require('express')
 
 const app = express();
-
+const errorController = require('./controllers/error')
 // register Handlebars
 // expressHbs() returns the initialized view engine
 // app.engine('handlebars', expressHbs({
@@ -26,7 +26,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 
-const adminData  = require('./routes/admin');
+const adminRoutes  = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 // req.body contains key-value pairs of data submitted in the request body.
@@ -35,12 +35,8 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname,'public')));
 
 app.use(shopRoutes);
-app.use('/admin',adminData.routes);
-app.use((req, res, next) => {
-    // res.status(404).sendFile(path.join(__dirname,'views','404.html'));
-
-    res.status(404).render('404', {pageTitle: '404 Not Found'})
-});
+app.use('/admin',adminRoutes);
+app.use(errorController.get404);
 
 const server = http.createServer(app);
 
