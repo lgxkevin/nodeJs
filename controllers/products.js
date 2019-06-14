@@ -24,17 +24,18 @@ exports.getProduct = (req, res, next) => {
     // console.log(adminData.products);
     // res.sendFile(path.join(rootDir,'views', 'shop.html'));
 
-    const products = Product.fetchAll();
+    Product.fetchAll(products => {
     // use the default template engine (defined in app.js) and return that template
     // render function allow us to pass data that should be added in to view
-    res.render('shop', {
-        prods: products,
-        pageTitle: 'PugShop',
-        path: '/',
-        hasProducts: products.length > 0,
-        activeShop: true,
-        productCSS: true
-        // don't use the default layout
-        // layout: false
+        res.render('shop', {
+            prods: products,
+            pageTitle: 'PugShop',
+            path: '/',
+            hasProducts: products.length > 0,
+            activeShop: true,
+            productCSS: true
+            // don't use the default layout
+            // layout: false
+        });
     });
 };
