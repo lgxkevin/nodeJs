@@ -1,44 +1,74 @@
-const http = require('http'); //import files
+const http = require('http');
 const bodyParser = require('body-parser');
 const path = require('path');
-// const expressHbs = require('express-handlebars');
 
 const express = require('express')
 
 const app = express();
-const errorController = require('./controllers/error')
-// register Handlebars
-// expressHbs() returns the initialized view engine
-// app.engine('handlebars', expressHbs({
-//     layoutsDir:'views/layouts/',
-//     defaultLayout: 'main-layout',
-//     extname: 'handlebars'
-// }));
-// app.set('view engine', 'handlebars');
+const errorController = require('./controllers/error');
+
+const sequelize = require('./util/database');
+const Product = require('./models/product');
+const User = require('./models/user');
+const Cart = require('./models/cart');
+const CartItem = require('./models/cart-item');
+const Order = require('./models/order');
+const OrderItem = require('./models/order-item');
 
 // set the view engine to Ejs
 app.set('view engine', 'ejs');
-
-// the default engine extension to use when omitted
-//app.set('view engine', 'pug');
 
 // A directory or an array of directories for the application's views.
 app.set('views', 'views');
 
 
-const adminRoutes  = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 // req.body contains key-value pairs of data submitted in the request body.
 // By default, it is undefined, and is populated when use body-parsing middleware
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 // load public css files
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// registered for incoming request, a middleware, 
+// after server successfully started
+app.use((req, res, next) => {
+    User.findByPk(1)
+        .then(user => {
+            req.user = user;
+            next();
+        })
+        .catch(err => console.log(err));
+});
 
 app.use(shopRoutes);
-app.use('/admin',adminRoutes);
+app.use('/admin', adminRoutes);
 app.use(errorController.get404);
 
-const server = http.createServer(app);
+// define relations
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+User.hasMany(Product);
+Cart.belongsTo(User);
+User.hasOne(Cart);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, { through: OrderItem });
 
-server.listen(3000);  //listen for incoming request
+sequelize.sync()
+    .then(result => {
+        return User.findByPk(1);
+    })
+    .then(user => {
+        if (!user) {
+            return User.create({ name: 'Kevin', email: 'kevin@kevin.com' });
+        }
+        return user;
+    })
+    .then(user => {
+        return user.createCart()
+    })
+    .then(cart => app.listen(3000))
+    .catch(err => console.log(err));
