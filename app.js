@@ -80,7 +80,7 @@ app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.csrfToken = req.csrfToken();
   next();
-})
+});
 
 // registered for incoming request, a middleware, 
 // after server successfully started
@@ -119,7 +119,7 @@ app.use((error, req, res, next) => {
     path: '/500',
     isAuthenticated: req.session.isLoggedIn
   })
-})
+});
 
 mongoose.connect(MONGODB_URI,
   { useNewUrlParser: true })
