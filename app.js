@@ -7,6 +7,8 @@ const express = require('express')
 const errorController = require('./controllers/error');
 // const mongoConnect = require('./util/database').mongoConnect;
 // const User = require('./models/user');
+const isAuth = require('./middleware/is-auth');
+const shopController = require('./controllers/shop');
 
 const keys = require('./keys/key');
 const mongoose = require('mongoose');
@@ -71,14 +73,12 @@ app.use(session({
   saveUninitialized: false,
   store: store
 }));
-app.use(csrfProtection);
 app.use(flash());
 
 app.use((req, res, next) => {
   // every request that is executed, these two fields will be set
   // for the views that are rendered
   res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
   next();
 });
 
@@ -100,6 +100,13 @@ app.use((req, res, next) => {
       // inside async functions, wrap error inside next()
       next(new Error(err));
     });
+});
+
+app.post('/create-order', isAuth, shopController.postOrder);
+app.use(csrfProtection);
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken();
+  next();
 });
 
 app.use('/admin', adminRoutes);

@@ -17,34 +17,34 @@ router.get('/products', isAuth, adminController.getProducts);
 
 // /admin/add-product => POST
 router.post('/add-product',
-    [
-        body('title')
-            .isString()
-            .isLength({ min: 3 })
-            .trim(),
-        body('price')
-            .isFloat(),
-        body('description')
-            .isLength({ min: 5, max: 400 })
-            .trim()
-    ],
-    isAuth, adminController.postAddProduct);
+  [
+    body('title')
+      .isString()
+      .isLength({ min: 3 })
+      .trim(),
+    body('price')
+      .isFloat(),
+    body('description')
+      .isLength({ min: 5, max: 400 })
+      .trim()
+  ],
+  isAuth, adminController.postAddProduct);
 
 router.get('/edit-product/:productId', isAuth, adminController.getEditProduct);
 
 router.post('/edit-product',
-    [
-        body('title')
-            .isString()
-            .isLength({ min: 3 })
-            .trim(),
-        body('price')
-            .isFloat(),
-        body('description')
-            .isLength({ min: 5, max: 400 })
-            .trim()
-    ],
-    isAuth, adminController.postEditProduct);
+  [
+    body('title')
+      .isString()
+      .isLength({ min: 3 })
+      .trim(),
+    body('price')
+      .isFloat(),
+    body('description')
+      .isLength({ min: 5, max: 400 })
+      .trim()
+  ],
+  isAuth, adminController.postEditProduct);
 
 router.delete('/product/:productId', isAuth, adminController.deleteProduct);
 
